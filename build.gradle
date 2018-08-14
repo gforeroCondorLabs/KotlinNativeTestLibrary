@@ -1,0 +1,46 @@
+buildscript {
+    ext.kotlin_version = '1.2.60'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+version = '1.0'
+
+apply plugin:'java-library'
+apply plugin:'kotlin'
+
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'maven-publish'
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "com.zendesk.nativetest"
+            artifactId = "zendesk-native-test"
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
