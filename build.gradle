@@ -1,12 +1,17 @@
 buildscript {
     ext.kotlin_version = '1.2.60'
+    ext.konan_version = '0.8.2'
 
     repositories {
         mavenCentral()
+        maven {
+            url  "https://dl.bintray.com/jetbrains/kotlin-native-dependencies"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$konan_version"
     }
 }
 
@@ -14,6 +19,7 @@ version = '1.0'
 
 apply plugin:'java-library'
 apply plugin:'kotlin'
+apply plugin:'konan'
 
 
 repositories {
@@ -43,4 +49,10 @@ publishing {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+konan.targets = ['ios_arm32', 'ios_arm64', 'ios_x64']
+
+konanArtifacts {
+    framework('KotlinNativeTestLibrary')
 }
