@@ -15,4 +15,5 @@ interface GenericInterface<T> {
     fun getListString() : List<String>
 
     fun getMutableListString() : MutableList<String>
+
 }

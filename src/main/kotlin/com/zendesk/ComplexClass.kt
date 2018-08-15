@@ -1,6 +1,6 @@
 package com.zendesk
 
-class ComplexClass(val description : String) : GenericInterface<TestClass> {
+class ComplexClass(val information : String) : GenericInterface<TestClass> {
     override fun getListString(): List<String> = listOf("String_1", "String_2", "String_3")
 
     override fun getMutableListString(): MutableList<String> = mutableListOf("String_1", "String_2", "String_3")

@@ -53,6 +53,32 @@ dependencies {
 
 konan.targets = ['ios_arm32', 'ios_arm64', 'ios_x64']
 
+def frameworkName = 'KotlinNativeTestLibrary'
+
 konanArtifacts {
-    framework('KotlinNativeTestLibrary')
+    framework(frameworkName)
+}
+
+
+task lipo(type: Exec, dependsOn: 'build') {
+    def frameworks = files(
+            "$buildDir/konan/bin/ios_arm32/${frameworkName}.framework/$frameworkName",
+            "$buildDir/konan/bin/ios_arm64/${frameworkName}.framework/$frameworkName",
+            "$buildDir/konan/bin/ios_x64/${frameworkName}.framework/$frameworkName"
+    )
+    def output = file("$buildDir/konan/bin/iphone_universal/${frameworkName}.framework/$frameworkName")
+    inputs.files frameworks
+    outputs.file output
+    executable = 'lipo'
+    args = frameworks.files
+    args += ['-create', '-output', output]
+}
+task copyFramework(type: Copy, dependsOn: lipo) {
+    from("$buildDir/konan/bin/ios_x64") {
+        include '*/Headers/*'
+        include '*/Modules/*'
+        include '*/Info.plist'
+    }
+    from "$buildDir/konan/bin/iphone_universal"
+    into "$buildDir/konan/bin/iphone_universal_framework/$frameworkName"
 }
